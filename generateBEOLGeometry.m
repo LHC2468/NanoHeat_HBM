@@ -69,11 +69,14 @@ function [geometry, geoTable, area_size, metal_density, via_density...
         for i = 1:numel(mx)
             rectangle('Position', [mx(i), my(i), mw(i), ml(i)], ...
                       'FaceColor', [1 0.8 0.3 0.5], 'EdgeColor', 'y')
+
         end
 
         % via boxes
         for j = 1:numel(x)
-            rectangle('Position', [x(j)-s(j)/2, y(j)-s(j)/2, s(j), s(j)], ...
+            % rectangle('Position', [x(j)-s(j)/2, y(j)-s(j)/2, s(j), s(j)], ...
+            %           'FaceColor', [0.2 0.7 1 0.7], 'EdgeColor', 'b')
+            rectangle('Position', [x(j), y(j), s(j), s(j)], ...
                       'FaceColor', [0.2 0.7 1 0.7], 'EdgeColor', 'b')
         end
 
@@ -125,20 +128,21 @@ function geometry = createMetalLayers(geometry, metal_density, thickness, area_s
         for i = 0:num_lines-1
             % randomize metal line cuts -----------------------------------
             x_pos = -area_size/2 + i * (area_size/num_lines);
-            % y_pos = -area_size/2; % flip for horizontal lines
-            y_min = -area_size/2;
-            y_max = area_size/2 - min_segment_length;
-            y_start = (y_max - y_min) * rand() + y_min;
-            max_length = area_size/2 - y_start;
-            length = min_segment_length + (max_length - min_segment_length) * rand();
+            y_pos = -area_size/2; % flip for horizontal lines
+            % y_min = -area_size/2;
+            % y_max = area_size/2 - min_segment_length;
+            % y_start = (y_max - y_min) * rand() + y_min;
+            % max_length = area_size/2 - y_start;
+            % length = min_segment_length + (max_length - min_segment_length) * rand();
 
             % list the metal structure ------------------------------------
+                % y_pos change to y_start and area_size change to length
             metal_line = struct('LayerName', sprintf('%s_%d', layer_name_base, i), ...
                               'LayerType', 'Metal', 'Material', 'copper', ...
-                              'XPosition', x_pos, 'YPosition', y_start, ...
+                              'XPosition', x_pos, 'YPosition', y_pos, ...
                               'ZPosition', z_pos, 'XSize', metal_widths(layer), ...
-                              'YSize', length, 'ZSize', thickness, ...
-                              'Top', y_start + area_size, 'Right', x_pos + metal_widths(layer));
+                              'YSize', area_size, 'ZSize', thickness, ...
+                              'Top', y_pos + area_size, 'Right', x_pos + metal_widths(layer));
             
             geometry = [geometry; metal_line];
         end
@@ -169,7 +173,7 @@ function geometry = createVias(geometry, via_density, via_height, area_size)
 
         % metal line centers for via snapping
         % (matching/overlapping whatever you call it)
-        metal_centers_x = [metal_lines.XPosition] + [metal_lines.XSize]/2;
+        metal_centers_x = [metal_lines.XPosition] + [metal_lines.XSize]/2; 
         metal_centers_y = [metal_lines.YPosition] + [metal_lines.YSize]/2;
 
         % positions for overlap checking
@@ -215,7 +219,7 @@ function geometry = createVias(geometry, via_density, via_height, area_size)
 
             via = struct('LayerName', sprintf('%s_%d', via_name_base, i), ...
                          'LayerType', 'Via', 'Material', 'copper', ...
-                         'XPosition', x_pos, 'YPosition', y_pos, ...
+                         'XPosition', x_pos-via_size/2, 'YPosition', y_pos-via_size/2, ...
                          'ZPosition', z_pos, 'XSize', via_size, ...
                          'YSize', via_size, 'ZSize', via_height, ...
                          'Top', y_pos + via_size/2, 'Right', x_pos + via_size/2);
