@@ -1,0 +1,15 @@
+LayerName,LayerType,Material,ZPosition,Thickness,XSize,YSize
+M4_metal_interconnect,Metal,copper,10,0.8,100,100
+M5_metal_interconnect,Metal,copper,15,0.8,100,100
+M6_metal_interconnect,Metal,copper,20,0.8,100,100
+M7_metal_interconnect,Metal,copper,25,0.8,100,100
+M8_metal_interconnect,Metal,copper,30,0.8,100,100
+M9_metal_interconnect,Metal,copper,35,0.8,100,100
+M10_metal_interconnect,Metal,copper,40,0.8,100,100
+Dielectric_layers,Dielectric,SiO2,9,32,100,100
+V4_ILD_vias,Via,copper,11,3,2,2
+V5_ILD_vias,Via,copper,16,3,2,2
+V6_ILD_vias,Via,copper,21,3,2,2
+V7_ILD_vias,Via,copper,26,3,2,2
+V8_ILD_vias,Via,copper,31,3,2,2
+V9_ILD_vias,Via,copper,36,3,2,2
